@@ -9,7 +9,6 @@
     state: directory
 
 - name: Generate CA private key
-  become: true
   openssl_privatekey:
     path: "{{cert_path + '/uscope_root.key'}}"
     cipher: auto

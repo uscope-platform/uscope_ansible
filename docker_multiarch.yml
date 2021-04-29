@@ -1,0 +1,86 @@
+- hosts: localhost
+  vars:
+    docker_source_dir: /home/fils/git/uscope_docker
+    remote_host: root@uscope_0.local
+  tasks:
+
+  # - name: make sure the dependencies for multiarch are present
+  #   apt:
+  #     name: qemu-user-static binfmt-support
+  #     state: present
+
+
+  - name: enable buildx
+    shell: 
+    args:
+      cmd: docker buildx install
+      chdir: "{{docker_source_dir}}"
+
+  - name: create build context
+    shell: 
+    args:
+      cmd: docker buildx create --use
+      chdir: "{{docker_source_dir}}"
+  
+  - import_tasks: generate_cert.yml
+    vars:
+      cert_path: "{{docker_source_dir+ '/client/certs'}}"
+
+  - name: Build driver container
+    shell: 
+    args:
+      cmd: docker buildx build --ssh default --platform linux/arm/v7 -t driver:latest  -o type=docker,dest=- driver > driver.tar
+      chdir: "{{docker_source_dir}}"
+
+  - name: Build server container
+    shell: 
+    args:
+      cmd: docker buildx build --ssh default --platform linux/arm/v7 -t server:latest  -o type=docker,dest=- server > server.tar
+      chdir: "{{docker_source_dir}}"
+  
+  - name: Build database container
+    shell: 
+    args:
+      cmd: docker buildx build --ssh default --platform linux/arm/v7 -t database:latest  -o type=docker,dest=- database > database.tar
+      chdir: "{{docker_source_dir}}"
+  
+  - name: Build client container
+    shell: 
+    args:
+      cmd: docker buildx build --ssh default --platform linux/arm/v7 -t client:latest  -o type=docker,dest=- client > client.tar
+      chdir: "{{docker_source_dir}}"
+
+  - name: Delete server key to avoid leaks
+    file:
+      path: "{{docker_source_dir+ '/client/certs/uscope_0.pem'}}"
+      state: absent
+
+  - name: push driver images to target
+    command: 
+    args:
+      cmd:  scp driver.tar {{remote_host}}:/home/root
+      chdir: "{{docker_source_dir}}"
+  
+  - name: push server images to target
+    command: 
+    args:
+      cmd:  scp server.tar {{remote_host}}:/home/root
+      chdir: "{{docker_source_dir}}"
+
+  - name: push database images to target
+    command: 
+    args:
+      cmd:  scp database.tar {{remote_host}}:/home/root
+      chdir: "{{docker_source_dir}}"
+
+  - name: push client images to target
+    command: 
+    args:
+      cmd:  scp client.tar {{remote_host}}:/home/root
+      chdir: "{{docker_source_dir}}"
+  
+  - name: push docker-compose 
+    command: 
+    args:
+      cmd:  scp docker-compose_zed.yml {{remote_host}}:/home/root/docker-compose.yml
+      chdir: "{{docker_source_dir}}"
