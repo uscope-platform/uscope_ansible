@@ -51,7 +51,7 @@
 
   - import_tasks: uscope_webapp_builder.yml
     vars:
-      github_url: "{{github_url}}"
+      gh_url: '{{github_url}}'
 
   - name: Delete server key to avoid leaks
     file:
