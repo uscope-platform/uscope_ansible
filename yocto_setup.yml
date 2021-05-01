@@ -1,6 +1,7 @@
 - hosts: localhost
   vars:
     toolchain_target_dir: /software/yocto_ansible
+    github_url: git@github.com:filssavi
     xilinx_tools_release: rel-v2020.2
   tasks:
 
@@ -43,7 +44,7 @@
 
   - name: Clone meta-uscope layer
     git:
-      repo: git@github.com:filssavi/meta-uscope.git
+      repo: "{{github_url+'/meta-uscope.git'}}"
       dest: "{{toolchain_target_dir+'/sources/meta-uscope'}}"
       accept_hostkey: yes
 

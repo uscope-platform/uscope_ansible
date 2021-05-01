@@ -1,6 +1,6 @@
 - name: Clone web app
   git:
-    repo: git@github.com:filssavi/uscope_react.git
+    repo: "{{github_url+'/uscope_react.git'}}"
     dest: webapp
 
 - name: Install packages based on package.json
