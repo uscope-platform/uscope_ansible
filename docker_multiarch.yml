@@ -21,10 +21,6 @@
       cmd: docker buildx create --use
       chdir: docker
   
-  - import_tasks: generate_cert.yml
-    vars:
-      cert_path: docker/client/certs
-
   - name: Build driver container
     shell: 
     args:
@@ -42,12 +38,16 @@
     args:
       cmd: docker buildx build --ssh default --platform linux/arm/v7 -t database:latest  -o type=docker,dest=- database > database.tar
       chdir: docker
-  
-  - name: Build client container
-    shell: 
-    args:
-      cmd: docker buildx build --ssh default --platform linux/arm/v7 -t client:latest  -o type=docker,dest=- client > client.tar
-      chdir: docker
+    
+  ########################################################
+  #             BUILD PRODUCTION WEB APP ON HOST         #
+  ########################################################
+
+  - import_tasks: generate_cert.yml
+    vars:
+      cert_path: docker/client/certs
+
+  - import_tasks: uscope_webapp_builder.yml
 
   - name: Delete server key to avoid leaks
     file:

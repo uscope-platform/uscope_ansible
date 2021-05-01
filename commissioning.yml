@@ -29,7 +29,6 @@
 #              LOAD CONTAINERS                         #
 ########################################################
 
-
     - name: Load Driver image
       command: 
       args: 
