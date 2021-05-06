@@ -1,0 +1,4 @@
+---
+docker_source_dir: /home/fils/git/uscope_docker
+github_url: git@github.com:filssavi
+remote_host: root@uscope_0.local

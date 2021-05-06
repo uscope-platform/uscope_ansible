@@ -1,0 +1,4 @@
+---
+toolchain_target_dir: /software/yocto_ansible_test
+github_url: git@github.com:filssavi
+xilinx_tools_release: rel-v2020.2

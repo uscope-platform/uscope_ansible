@@ -1,0 +1,45 @@
+#             PREPARE HOST ENVIRONMENT
+
+- name: Install docker compose
+  pip:
+    name: docker-compose
+
+#             ENABLE SERVICES
+
+- name: Enable docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Enable containerd
+  systemd:
+    name: containerd
+    enabled: yes
+    state: started
+
+#              LOAD CONTAINERS
+
+- name: Load Driver image
+  command: 
+  args: 
+    cmd: docker load --input driver.tar
+    chdir: /home/root
+
+- name: Load Server image
+  command: 
+  args: 
+    cmd: docker load --input server.tar
+    chdir: /home/root
+
+- name: Load Database image
+  command: 
+  args: 
+    cmd: docker load --input database.tar
+    chdir: /home/root
+
+- name: Load Client image
+  command: 
+  args: 
+    cmd:  docker load --input client.tar
+    chdir: /home/root
