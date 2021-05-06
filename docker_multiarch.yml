@@ -87,3 +87,18 @@
     args:
       cmd:  scp docker-compose_zed.yml {{remote_host}}:/home/root/docker-compose.yml
       chdir: docker
+
+  - name: Delete CA key to avoid leaks
+    file:
+      path: "{{cert_path + '/uscope_root.key'}}"
+      state: absent
+
+  - name: Clean up docker directory
+    file:
+      path: docker
+      state: absent
+
+  - name: Clean up webapp directory
+    file:
+      path: webapp
+      state: absent
