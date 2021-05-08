@@ -63,3 +63,15 @@
   copy:
     src: local.conf
     dest: "{{toolchain_target_dir+'/build/conf'}}"
+
+- name: Copy platform XSA file
+  copy:
+    src: uscope_platform.xsa
+    dest: "{{toolchain_target_dir+'/uscope_platform.xsa'}}"
+
+- name: Specify paths in local conf
+  replace:
+    path: "{{toolchain_target_dir+'/build/conf/local.conf'}}"
+    regexp: '///path///'
+    replace: "{{toolchain_target_dir+'/uscope_platform.xsa'}}"
+  
