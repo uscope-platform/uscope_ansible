@@ -7,7 +7,6 @@ The uscope toolchain is developed built and tested on Ubuntu Linux, while it sho
 ### Known working versions
 
 - Ubuntu 20.04 (Focal Fossa) LTS
-- Ubuntu 21.04 Hirsute Hippo
 
 ## Dependencies
 
@@ -18,10 +17,6 @@ Before starting toolchain install and commissioning the following tools should b
 - The Xilinx Vivado toolchain, while optional, should be installed for HDL development and debug.
 - The following packages from ubuntu repository are needed: libtinfo5, libncurses5, ansible, gawk wget git diffstat unzip texinfo gcc-multilib
 build-essential chrpath socat libsdl1.2-dev xterm chrpath
-
-### Ubuntu 21.04
-
-- For Ubuntu 21.04 the package python-is-python2 is needed by yocto
 
 ### Ubuntu 20.04
 
