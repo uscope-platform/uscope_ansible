@@ -3,32 +3,22 @@
     path: "{{toolchain_target_dir}}"
     state: directory
 
-- name: Download repo tool
-  get_url:
-    url: https://storage.googleapis.com/git-repo-downloads/repo
-    dest: "{{toolchain_target_dir}}"
-
-- name: Make repo binary executable
-  file: 
-    path: "{{toolchain_target_dir + '/repo'}}"
-    mode: a+x
-
 - name: Setup directory structure with yocto and xilinx layers
   command: 
   args:
-    cmd: "{{toolchain_target_dir + '/repo'}} init -u git://github.com/Xilinx/yocto-manifests.git -b '{{xilinx_tools_release}}'"
+    cmd: "repo init -u git://github.com/Xilinx/yocto-manifests.git -b '{{xilinx_tools_release}}'"
     chdir: "{{toolchain_target_dir}}"
 
 - name: Download Base repositories
   command: 
   args:
-    cmd: "{{toolchain_target_dir + '/repo'}} sync"
+    cmd: "repo sync"
     chdir: "{{toolchain_target_dir}}"
 
 - name: Checkout Base repositories
   command: 
   args:
-    cmd: "{{toolchain_target_dir + '/repo'}} start {{xilinx_tools_release}} --all"
+    cmd: "repo start {{xilinx_tools_release}} --all"
     chdir: "{{toolchain_target_dir}}"
 
 - name: Clone meta-uscope layer

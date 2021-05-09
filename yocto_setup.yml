@@ -1,3 +1,5 @@
 - hosts: localhost
   roles:
     - yocto
+  vars:
+    - toolchain_target_dir: /tools/yocto
