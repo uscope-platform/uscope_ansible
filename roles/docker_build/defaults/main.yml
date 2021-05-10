@@ -1,4 +1,5 @@
 ---
 docker_source_dir: /home/fils/git/uscope_docker
-github_url: git@github.com:filssavi
+github_url: git@github.com:uscope-platform
 remote_host: root@uscope_0.local
+
