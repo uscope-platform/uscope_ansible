@@ -1,4 +1,4 @@
-# uScope toolchain setup
+# uScope Platform
 
 ## Supported systems
 
@@ -52,6 +52,18 @@ The Full commissioning process is roughly split into three separate phases
 2. OS compilation
 
 3. uScope stack build and deployment
+
+
+### Access to repositories
+
+The since the build infrastructure pulls code directly from the private upstream repositories ssh access to github must be set up on the machine, and garanted to the repository by an administrator. To allow the build systems to use the ssh key safely it should be added to the system ssh agent, that needs to be running in the current terminal.
+
+To launch the ssh agent use the following commands after launching the terminal.
+
+```sh
+eval $(ssh-agent)
+ssh-add
+```
 
 ### Build system setup
 
