@@ -103,30 +103,30 @@
 
 - name: Copy FSBL/u-boot
   copy:
-    src: "{{yocto_image_dir + 'boot.bin'}}"
+    src: "{{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/boot.bin'}}"
     dest: boot_part
   become: yes
 
 - name: Copy Kenel
   copy:
-    src: "{{yocto_image_dir + 'uImage'}}"
+    src: "{{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/uImage'}}"
     dest: boot_part/boot
   become: yes
 
 - name: Copy device tree
   copy:
-    src: "{{yocto_image_dir + 'microzed-zynq7-system.dtb'}}"
+    src: "{{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/microzed-zynq7-system.dtb'}}"
     dest: boot_part/boot
   become: yes
 
 - name: Copy extlinux
   copy:
-    src: "{{yocto_image_dir + 'extlinux.conf'}}"
+    src: "{{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/extlinux.conf'}}"
     dest: boot_part/boot/extlinux
   become: yes
 
 - name: Extract root filesystem 
-  command: tar -xf {{yocto_image_dir + 'uscope-microzed-zynq7.tar.gz'}} -C root_part
+  command: tar -xf {{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/uscope-microzed-zynq7.tar.gz'}} -C root_part
   become: yes
 
 ########################################################

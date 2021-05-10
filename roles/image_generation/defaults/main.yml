@@ -1,5 +1,5 @@
 ---
-image_user: fils
+image_user: user
 image_file: "/software/working_image.img"
-yocto_image_dir: /software/yocto/build/tmp/deploy/images/microzed-zynq7/
+yocto_image_dir: /software/yocto/
 mac_address: 12:69:35:af:11:23
