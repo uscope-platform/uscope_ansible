@@ -11,6 +11,9 @@
   roles:
     - role: image_generation
       when: generate_image == 'yes'
+      vars:
+        - image_file: "/home/fils/working_image.img"
+          yocto_image_dir: /home/fils/image/
 
 
 - hosts: localhost

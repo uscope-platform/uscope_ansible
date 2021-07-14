@@ -1,0 +1,9 @@
+
+
+########################################################
+#       BUILD CONTAINERS ON HOST FOR DEPLOYMENT        #
+########################################################
+
+- hosts: localhost
+  roles:
+    - docker_build_devel

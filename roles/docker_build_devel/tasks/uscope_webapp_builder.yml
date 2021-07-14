@@ -1,0 +1,29 @@
+- name: Clone web app
+  git:
+    repo: "{{gh_url+'/uscope_client.git'}}"
+    dest: webapp
+
+- name: Install packages based on package.json
+  yarn:
+    path: webapp
+
+- name: Build  production webapp
+  shell: 
+  args:
+    cmd: yarn run build:staging
+    chdir: webapp
+
+- name: Copy webapp to target
+  copy:
+    src: webapp/build
+    dest: docker/client
+
+- import_tasks: generate_cert.yml
+  vars:
+    cert_path: docker/client/certs
+
+- name: Build client container
+  shell: 
+  args:
+    cmd: docker buildx build --build-arg NGINX_CONFIG=nginx_devel.conf --ssh default -t client:latest  -o type=docker,dest=- client > client.tar
+    chdir: docker
