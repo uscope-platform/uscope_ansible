@@ -7,7 +7,7 @@
   yarn:
     path: webapp
 
-- name: Build  production webapp
+- name: Build staging webapp
   shell: 
   args:
     cmd: yarn run build:staging
@@ -18,10 +18,22 @@
     src: webapp/build
     dest: docker/client
 
-- import_tasks: generate_cert.yml
-  vars:
-    cert_path: docker/client/certs
+- name: Create cert directory
+  file:
+    path: docker/client/certs
+    state: directory
 
+
+- name: create dummy cert
+  file:
+    path: docker/client/certs/uscope_0.crt
+    state: touch
+
+- name: create dummy key
+  file:
+    path: docker/client/certs/uscope_0.pem
+    state: touch
+    
 - name: Build client container
   shell: 
   args:

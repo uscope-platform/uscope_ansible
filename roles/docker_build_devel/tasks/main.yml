@@ -40,18 +40,10 @@
 
 #             BUILD PRODUCTION WEB APP ON HOST
 
-- import_tasks: generate_cert.yml
-  vars:
-    cert_path: docker/client/certs
 
 - import_tasks: uscope_webapp_builder.yml
   vars:
     gh_url: '{{github_url}}'
-
-- name: Delete server key to avoid leaks
-  file:
-    path: docker/client/certs/uscope_0.pem
-    state: absent
 
 - name: Load Client image
   command: 
@@ -77,7 +69,6 @@
     cmd:  docker load --input driver.tar
     chdir: docker
 
-    
 
 #               CLEAN UP BUILD DIRECTORY
 
