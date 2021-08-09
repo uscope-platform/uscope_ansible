@@ -1,0 +1,28 @@
+- name: copy over domain_prefix from workstation
+  set_fact:
+    domain_prefix: "{{ hostvars[groups['localhost'][0]].domain_prefix }}"
+
+- name: copy over new_domain_progressive from the other host
+  set_fact:
+    new_domain_progressive: "{{ hostvars[groups['localhost'][0]].new_domain_progressive }}"
+
+- name: copy over domain_tld from the other host
+  set_fact:
+    domain_tld: "{{ hostvars[groups['localhost'][0]].domain_tld }}"
+
+- name: push override default avahi-conf with template
+  copy:
+    src: avahi-daemon.conf
+    dest: /etc/avahi/avahi-daemon.conf
+
+- name: Update host name config
+  replace:
+    path: /etc/avahi/avahi-daemon.conf
+    regexp: '(\s+)host-name=HOST_NAME(\s+.*)?$'
+    replace: '\1host-name={{domain_prefix + new_domain_progressive}}\2'
+
+- name: Update domain name config
+  replace:
+    path: /etc/avahi/avahi-daemon.conf
+    regexp: '(\s+)domain-name=DOMAIN_NAME(\s+.*)?$'
+    replace: '\1domain-name={{domain_tld}}\2'

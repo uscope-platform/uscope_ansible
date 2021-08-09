@@ -29,7 +29,7 @@
     path: "{{cert_path + '/uscope_0.csr'}}"
     privatekey_path: "{{cert_path + '/uscope_0.pem'}}"
     common_name: "{{cert_domain_name}}"
-    subject_alt_name: DNS:"{{cert_domain_name}}"
+    subject_alt_name: "DNS:{{cert_domain_name}}"
     
 - name: Sign server certificate with CA
   community.crypto.x509_certificate:

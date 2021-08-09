@@ -65,6 +65,17 @@
     - containers_deploy
 
 ########################################################
+#   UPDATE DOMAIN NAME ON TARGET                       #
+########################################################
+
+
+- hosts: uzed
+  remote_user: root
+  roles:
+    - avahi_conf_update
+
+
+########################################################
 #   UPDATE DOMAIN NAME CFG AFTER SUCCESSFULL DEPLOY    #
 ########################################################
 

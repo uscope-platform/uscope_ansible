@@ -20,6 +20,7 @@
 
 - import_tasks: generate_cert.yml
   vars:
+    cert_domain_name: "{{app_domain_name}}"
     cert_path: docker/client/certs
 
 - name: Build client container
