@@ -46,6 +46,8 @@
 - hosts: localhost
   roles:
     - docker_build
+  vars:
+    - domain_name: uscope_0.local
 
 
 ########################################################

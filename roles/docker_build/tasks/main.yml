@@ -41,6 +41,7 @@
 
 - import_tasks: generate_cert.yml
   vars:
+    cert_domain_name: "{{domain_name}}"
     cert_path: docker/client/certs
 
 - import_tasks: uscope_webapp_builder.yml
