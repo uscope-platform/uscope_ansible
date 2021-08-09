@@ -1,0 +1,14 @@
+- name: retrive domain_prefix
+  set_fact: domain_prefix={{ lookup('ini', 'DOMAIN_NAME_PREFIX section=domain file=domain_name.cfg') }}
+
+- name: retrive old domain_progressive
+  set_fact: old_domain_progressive={{ lookup('ini', 'DOMAIN_NAME_PROGRESSIVE section=domain file=domain_name.cfg')}}
+
+- name: find new domain_progressive
+  set_fact: new_domain_progressive={{old_domain_progressive|int+1}}
+
+- name: retrive domain_tld
+  set_fact: domain_tld={{ lookup('ini', 'DOMAIN_NAME_TLD section=domain file=domain_name.cfg') }}
+
+- name: construct new domain name
+  set_fact: constructed_domain_name={{  domain_prefix + new_domain_progressive + '.' + domain_tld }}

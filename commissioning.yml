@@ -43,20 +43,38 @@
 #       BUILD CONTAINERS ON HOST FOR DEPLOYMENT        #
 ########################################################
 
+
+- hosts: localhost
+  roles:
+    - domain_name_assignment
+
 - hosts: localhost
   roles:
     - docker_build
   vars:
-    - domain_name: uscope_0.local
+    - domain_name: "{{constructed_domain_name}}"
 
 
 ########################################################
 #             PREPARE HOST ENVIRONMENT                 #
 ########################################################
 
-
 - hosts: uzed
   remote_user: root
   roles:
     - containers_deploy
+
+########################################################
+#   UPDATE DOMAIN NAME CFG AFTER SUCCESSFULL DEPLOY    #
+########################################################
+
+
+
+- hosts: localhost
+  tasks:
+    - name: Update domain name config
+      replace:
+        path: domain_name.cfg
+        regexp: '(\s+)DOMAIN_NAME_PROGRESSIVE={{old_domain_progressive}}(\s+.*)?$'
+        replace: '\1DOMAIN_NAME_PROGRESSIVE={{new_domain_progressive}}\2'
 
