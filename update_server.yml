@@ -1,0 +1,33 @@
+- hosts: uzed
+  remote_user: root
+  tasks:
+
+    - name: remove old image archive
+      file:
+        name: server.tar
+        state: absent
+  
+    - name: Remove server container
+      docker_container:
+        name: root_server_1
+        state: absent
+
+    - name: Remove server image
+      docker_image:
+        state: absent
+        name: server
+        tag: latest
+
+- hosts: localhost
+  roles:
+    - build_server_container
+    
+- hosts: uzed
+  remote_user: root
+  tasks:
+    - name: Load server image
+      docker_image:
+        name: server
+        tag: latest
+        load_path: server.tar
+        source: load

@@ -1,0 +1,26 @@
+
+
+- hosts: uzed
+  remote_user: root
+  tasks:
+
+    - name: remove old image archive
+      file:
+        name: driver.tar
+        state: absent
+
+    - name: Stop driver container
+      docker_container:
+        name: root_driver_1
+        state: stopped
+  
+    - name: Remove driver container
+      docker_container:
+        name: root_driver_1
+        state: absent
+
+    - name: Remove driver image
+      docker_image:
+        state: absent
+        name: driver
+        tag: latest

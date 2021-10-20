@@ -1,0 +1,5 @@
+---
+github_url: git@github.com:uscope-platform
+remote_host: root@uscope_0.local
+remove_docker_directory: True
+clone_docker_repo: True

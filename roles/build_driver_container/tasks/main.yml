@@ -1,0 +1,30 @@
+#               SETUP BUILD ENVIRONMENT
+
+- name: Clone uscope docker repo
+  git:
+    repo: "{{github_url + '/uscope_docker.git'}}"
+    dest: docker
+
+#                     BUILD CONTAINERS                 
+
+- name: Build driver container
+  shell: 
+  args:
+    cmd: docker buildx build --ssh default --platform linux/arm/v7 -t driver:latest  -o type=docker,dest=- driver > driver.tar
+    chdir: docker
+
+#               PUSH CONTAINERS TO TARGET
+
+- name: push driver images to target
+  command: 
+  args:
+    cmd:  scp driver.tar {{remote_host}}:/home/root
+    chdir: docker
+
+#               CLEAN UP BUILD DIRECTORY
+
+- name: Clean up docker directory
+  file:
+    path: docker
+    state: absent
+  when: remove_docker_directory | bool

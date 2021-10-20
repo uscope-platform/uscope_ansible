@@ -1,0 +1,35 @@
+- hosts: uzed
+  remote_user: root
+  tasks:
+
+    - name: remove old image archive
+      file:
+        name: client.tar
+        state: absent
+  
+    - name: Remove client container
+      docker_container:
+        name: root_client_1
+        state: absent
+
+    - name: Remove client image
+      docker_image:
+        state: absent
+        name: client
+        tag: latest
+
+- hosts: localhost
+  roles:
+    - build_client_container
+  vars:
+    - domain_name: "uscope_0.local"
+
+- hosts: uzed
+  remote_user: root
+  tasks:
+    - name: Load Driver image
+      docker_image:
+        name: client
+        tag: latest
+        load_path: client.tar
+        source: load

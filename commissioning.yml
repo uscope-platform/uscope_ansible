@@ -28,7 +28,9 @@
     - role: image_generation
       when: generate_image == 'yes'
       vars:
-        - image_file: "/software/working_image.img"
+        - image_file: "/home/fils/working_image.img"
+          yocto_image_dir: /software/yocto/
+          image_user: fils
 
 
 - hosts: localhost
