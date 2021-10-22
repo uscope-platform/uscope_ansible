@@ -1,0 +1,6 @@
+#               SETUP BUILD ENVIRONMENT
+
+- name: Clone uscope docker repo
+  git:
+    repo: "{{github_url + '/uscope_docker.git'}}"
+    dest: docker

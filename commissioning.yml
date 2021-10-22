@@ -67,10 +67,15 @@
 
 - hosts: localhost
   roles:
-    - docker_build
+    - pre_build
+    - build_client_container
+    - build_driver_container
+    - build_database_container
+    - build_server_container
+    - post_build
   vars:
     - domain_name: "{{constructed_domain_name}}"
-
+    - remote_host: "{{'root@' + constructed_domain_name}}"
 
 ########################################################
 #             PREPARE HOST ENVIRONMENT                 #

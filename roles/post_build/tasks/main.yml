@@ -1,0 +1,18 @@
+
+- name: push docker-compose 
+  command: 
+  args:
+    cmd:  scp docker-compose_zed.yml {{remote_host}}:/home/root/docker-compose.yml
+    chdir: docker
+
+#               CLEAN UP BUILD DIRECTORY
+
+- name: Clean up docker directory
+  file:
+    path: docker
+    state: absent
+
+- name: Clean up webapp directory
+  file:
+    path: webapp
+    state: absent
