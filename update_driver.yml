@@ -8,11 +8,6 @@
       file:
         name: driver.tar
         state: absent
-
-    - name: Stop driver container
-      docker_container:
-        name: root_driver_1
-        state: stopped
   
     - name: Remove driver container
       docker_container:
@@ -24,3 +19,18 @@
         state: absent
         name: driver
         tag: latest
+
+- hosts: localhost
+  roles:
+    - pre_build
+    - build_driver_container
+
+- hosts: uzed
+  remote_user: root
+  tasks:
+    - name: Load driver image
+      docker_image:
+        name: driver
+        tag: latest
+        load_path: driver.tar
+        source: load
