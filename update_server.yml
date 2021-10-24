@@ -20,6 +20,7 @@
 
 - hosts: localhost
   roles:
+    - pre_build
     - build_server_container
     
 - hosts: uzed

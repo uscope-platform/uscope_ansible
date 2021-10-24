@@ -1,3 +1,8 @@
+- name: Clone server
+  git:
+    repo: "{{github_url+'/uscope_server.git'}}"
+    dest: docker/server/uscope_server
+
 - name: Build server container
   shell: 
   args:

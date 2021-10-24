@@ -20,6 +20,7 @@
 
 - hosts: localhost
   roles:
+    - pre_build
     - build_client_container
   vars:
     - domain_name: "uscope_0.local"
