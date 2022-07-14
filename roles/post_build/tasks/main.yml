@@ -2,7 +2,7 @@
 - name: push docker-compose 
   command: 
   args:
-    cmd:  scp docker-compose_zed.yml {{remote_host}}:/home/root/docker-compose.yml
+    cmd:  scp {{dockerfile}} {{remote_host}}:/home/root/docker-compose.yml
     chdir: docker
 
 #               CLEAN UP BUILD DIRECTORY

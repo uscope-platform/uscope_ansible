@@ -1,2 +1,3 @@
 ---
 remote_host: root@uscope_0.local
+dockerfile: docker-compose_zed.yml

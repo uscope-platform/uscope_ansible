@@ -16,6 +16,7 @@
 - name: Clone web app
   git:
     repo: "{{gh_url+'/uscope_client.git'}}"
+    version: "{{repo_branch}}"
     dest: webapp
 
 - name: Install packages based on package.json
@@ -41,5 +42,5 @@
 - name: Build client container
   shell: 
   args:
-    cmd: docker buildx build --ssh default --platform linux/arm/v7 -t client:latest  -o type=docker,dest=- client > client.tar
+    cmd: docker buildx build --ssh default --build-arg NGINX_CONFIG={{nginx_config}} --platform linux/arm/v7 -t {{image_tag}}  -o type=docker,dest=- client > client.tar
     chdir: docker

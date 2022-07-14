@@ -1,0 +1,69 @@
+# Copyright 2021 University of Nottingham Ningbo China
+# Author: Filippo Savi <filssavi@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
+########################################################
+#       BUILD CONTAINERS ON HOST FOR DEPLOYMENT        #
+########################################################
+
+
+- hosts: localhost
+  roles:
+    - domain_name_assignment
+
+- hosts: localhost
+  roles:
+    - pre_build
+    - role: build_client_container
+      vars:
+        - container_tag: client_testing:latest
+        - git_branch: "ui_logic_separation"
+        - webserver_config: nginx_testing.conf
+    - role: build_driver_container
+      vars:
+        - container_tag: driver_testing:latest
+    - role: build_database_container
+      vars:
+        - container_tag: database_testing:latest
+    - role: build_server_container
+      vars:
+        - container_tag: server_testing:latest
+    - role: post_build
+      vars:
+        - dockerfile: docker-compose_zed_test.yml
+  vars:
+    - domain_name: "{{constructed_domain_name}}"
+    - remote_host: "{{'root@' + constructed_domain_name}}"
+
+# ########################################################
+# #             PREPARE HOST ENVIRONMENT                 #
+# ########################################################
+
+# - hosts: uzed
+#   remote_user: root
+#   roles:
+#     - containers_deploy
+
+# ########################################################
+# #   UPDATE DOMAIN NAME ON TARGET                       #
+# ########################################################
+
+
+# - hosts: uzed
+#   remote_user: root
+#   roles:
+#     - avahi_conf_update
+

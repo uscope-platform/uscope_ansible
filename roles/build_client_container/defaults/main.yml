@@ -1,4 +1,7 @@
 ---
 github_url: git@github.com:uscope-platform
+git_branch: main
 remote_host: root@uscope_0.local
 domain_name: uscope_0.local
+container_tag: client:latest
+webserver_config: nginx_prod.conf
