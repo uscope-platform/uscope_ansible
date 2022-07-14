@@ -37,10 +37,18 @@ The yarn package manager is used to build the client web app, it should be insta
 
 ### Ansible collections
 
-The Ansible configuration tool is used to automate many steps in the build process, and needs installation  of few additional collections, through the following command
+The Ansible configuration tool is used to automate many steps in the build process, and needs installation of few additional collections, through the following command
 
 ```sh
 ansible-galaxy collection install community.crypto
+```
+
+### Docker multi-arch
+
+To for docker multi-arch support to work properly additional setup is required, this the following command must be run
+
+```sh
+docker run --privileged --rm tonistiigi/binfmt --install all
 ```
 
 ## uScope Stack generation
