@@ -9,28 +9,31 @@
   
     - name: Remove client container
       docker_container:
-        name: root_client_1
+        name: root_client_testing_1
         state: absent
 
     - name: Remove client image
       docker_image:
         state: absent
-        name: client
+        name: client_testing
         tag: latest
 
 - hosts: localhost
   roles:
     - pre_build
-    - build_client_container
-  vars:
-    - domain_name: "uscope_0.local"
+    - role: build_client_container
+      vars:
+        - container_tag: client_testing:latest
+        - git_branch: "ui_logic_separation"
+        - webserver_config: nginx_testing.conf
+        - domain_name: "uscope_0.local"
 
 - hosts: uzed
   remote_user: root
   tasks:
     - name: Load Driver image
       docker_image:
-        name: client
+        name: client_testing
         tag: latest
         load_path: client.tar
         source: load
