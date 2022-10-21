@@ -6,7 +6,7 @@
 - name: Build server container
   shell: 
   args:
-    cmd: docker buildx build --ssh default --platform linux/arm/v7 -t {{container_tag}}  -o type=docker,dest=- server > server.tar
+    cmd: docker buildx build --ssh default --platform linux/arm/v7 -t {{container_tag}} --build-arg N_CORES={{ansible_facts["processor_nproc"]}} -o type=docker,dest=- server > server.tar
     chdir: docker
 
 - name: push server images to target
@@ -14,3 +14,4 @@
   args:
     cmd:  scp server.tar {{remote_host}}:/home/root
     chdir: docker
+     

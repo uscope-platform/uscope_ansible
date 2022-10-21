@@ -17,4 +17,4 @@
   roles:
     - yocto
   vars:
-    - toolchain_target_dir: /tools/yocto
+    - toolchain_target_dir: /software/yocto

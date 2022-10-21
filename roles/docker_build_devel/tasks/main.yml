@@ -47,6 +47,11 @@
     cmd: docker buildx build --ssh default -t database:latest  -o type=docker,dest=- database > database.tar
     chdir: docker
 
+- name: Clone server
+  git:
+    repo: "{{github_url+'/uscope_server.git'}}"
+    dest: docker/server/uscope_server
+    
 - name: Build server container
   shell: 
   args:
