@@ -21,7 +21,7 @@
 - name: Setup directory structure with yocto and xilinx layers
   command: 
   args:
-    cmd: "repo init -u git://github.com/Xilinx/yocto-manifests.git -b '{{xilinx_tools_release}}'"
+    cmd: "repo init -u https://github.com/Xilinx/yocto-manifests.git -b '{{xilinx_tools_release}}'"
     chdir: "{{toolchain_target_dir}}"
 
 - name: Download Base repositories
@@ -77,6 +77,6 @@
 - name: Specify paths in local conf
   replace:
     path: "{{toolchain_target_dir+'/build/conf/local.conf'}}"
-    regexp: '///path///'
+    regexp: '////path///'
     replace: "{{toolchain_target_dir+'/uscope_platform.xsa'}}"
   
