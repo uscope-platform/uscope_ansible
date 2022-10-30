@@ -117,7 +117,7 @@
 
 - name: Copy FSBL/u-boot
   copy:
-    src: "{{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/boot.bin'}}"
+    src: boot.bin
     dest: boot_part
   become: yes
 
@@ -129,7 +129,7 @@
 
 - name: Copy device tree
   copy:
-    src: "{{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/microzed-zynq7-system.dtb'}}"
+    src: microzed-zynq7-system.dtb
     dest: boot_part/boot
   become: yes
 
