@@ -143,6 +143,13 @@
   command: tar -xf {{yocto_image_dir + 'build/tmp/deploy/images/microzed-zynq7/uscope-microzed-zynq7.tar.gz'}} -C root_part
   become: yes
 
+- name: Setup avahi configuration
+  copy:
+    src: avahi-daemon.conf
+    dest: root_part/etc/avahi/avahi-daemon.conf
+  become: yes
+
+
 ########################################################
 #             CLEAN UP THE MESS                        #
 ########################################################
