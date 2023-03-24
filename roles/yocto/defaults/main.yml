@@ -14,5 +14,5 @@
 # limitations under the License.
 ---
 toolchain_target_dir: /software/yocto
-github_url: git@github.com:uscope-platform
+github_url: https://github.com/uscope-platform
 xilinx_tools_release: rel-v2022.2

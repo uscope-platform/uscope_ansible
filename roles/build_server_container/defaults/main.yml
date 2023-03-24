@@ -1,4 +1,4 @@
 ---
 remote_host: root@uscope_0.local
-github_url: git@github.com:uscope-platform
+github_url: https://github.com/uscope-platform
 container_tag: server:latest

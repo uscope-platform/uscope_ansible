@@ -1,5 +1,5 @@
 ---
-github_url: git@github.com:uscope-platform
+github_url: https://github.com/uscope-platform
 git_branch: main
 remote_host: root@uscope_0.local
 domain_name: uscope_0.local
