@@ -1,4 +1,8 @@
 #             BUILD PRODUCTION WEB APP ON HOST
+- import_tasks: uscope_documentation_build.yml
+  vars:
+    gh_url: '{{github_url}}'
+
 - import_tasks: uscope_webapp_builder.yml
   vars:
     app_domain_name: "{{domain_name}}"

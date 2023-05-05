@@ -1,0 +1,12 @@
+- name: Clone documentation
+  git:
+    repo: "{{gh_url+'/uscope_doc.git'}}"
+    dest: doc_builder
+
+- name: Run build documentation
+  make: 
+    target: html
+    chdir: doc_builder
+
+- name: Copy documentation to target
+  shell: mv doc_builder/_build docker/client/doc
