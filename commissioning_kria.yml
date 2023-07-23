@@ -1,0 +1,97 @@
+# Copyright 2021 University of Nottingham Ningbo China
+# Author: Filippo Savi <filssavi@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
+- hosts: localhost
+  vars_prompt:
+      - name: sd_device
+        prompt: Which device should be used for the SD card
+  tasks:
+    - name: write image to sd card
+      command: sudo dd of={{sd_device}} bs=1M  iflag=fullblock oflag=direct conv=fsync if=/software/yocto/build/tmp/deploy/images/k26-smk/kria-image-full-cmdline-k26-smk.wic
+
+
+
+# ########################################################
+# #             GROW ROOT PARTITION TO FILL DRIVE        #
+# ########################################################
+
+
+# - hosts: uzed
+#   remote_user: root
+#   vars_prompt:
+#       - name: resize_fs
+#         prompt: Is file system resizing needed?
+#   roles:
+#     - role: fs_resizing
+#       when: resize_fs == 'yes'
+
+
+# ########################################################
+# #       BUILD CONTAINERS ON HOST FOR DEPLOYMENT        #
+# ########################################################
+
+
+# - hosts: localhost
+#   roles:
+#     - domain_name_assignment
+
+# - hosts: localhost
+#   roles:
+#     - pre_build
+#     - build_client_container
+#     - build_driver_container
+#     - build_database_container
+#     - build_server_container
+#     - post_build
+#   vars:
+#     - domain_name: "{{constructed_domain_name}}"
+#     - remote_host: "{{'root@' + constructed_domain_name}}"
+
+# ########################################################
+# #             PREPARE HOST ENVIRONMENT                 #
+# ########################################################
+
+# - hosts: uzed
+#   remote_user: root
+#   roles:
+#     - containers_deploy
+
+# ########################################################
+# #   UPDATE DOMAIN NAME ON TARGET                       #
+# ########################################################
+
+
+# - hosts: uzed
+#   remote_user: root
+#   roles:
+#     - avahi_conf_update
+
+
+# ########################################################
+# #   UPDATE DOMAIN NAME CFG AFTER SUCCESSFULL DEPLOY    #
+# ########################################################
+
+
+
+# - hosts: localhost
+#   tasks:
+#     - name: Update domain name config
+#       replace:
+#         path: domain_name.cfg
+#         regexp: '(\s+)DOMAIN_NAME_PROGRESSIVE={{old_domain_progressive}}(\s+.*)?$'
+#         replace: '\1DOMAIN_NAME_PROGRESSIVE={{new_domain_progressive}}\2'
+

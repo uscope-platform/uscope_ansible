@@ -18,3 +18,4 @@
     - yocto
   vars:
     - toolchain_target_dir: /software/yocto
+    - target: zynqmp

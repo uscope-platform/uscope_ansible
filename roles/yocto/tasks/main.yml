@@ -41,21 +41,32 @@
     repo: "{{github_url+'/meta-uscope.git'}}"
     dest: "{{toolchain_target_dir+'/sources/meta-uscope'}}"
     accept_hostkey: yes
+  when: target == "zynq" 
+
+- name: Clone meta-uscope-k26 layer
+  git:
+    repo: "{{github_url+'/meta-uscope-k26.git'}}"
+    dest: "{{toolchain_target_dir+'/sources/meta-uscope'}}"
+    accept_hostkey: yes
+  when: target == "zynqmp" 
 
 - name: Copy meta-xilinx patch
   copy:
     src: meta-xilinx.patch
     dest: "{{toolchain_target_dir+'/sources/meta-xilinx'}}"
+  when: target == "zynq" 
 
 - name: Apply microzed patch to meta-xilinx
   command:
     cmd: git apply meta-xilinx.patch
     chdir: "{{toolchain_target_dir+'/sources/meta-xilinx'}}"
+  when: target == "zynq" 
 
 - name: Remove meta-xilinx patch
   file:
     path: "{{toolchain_target_dir+'/sources/meta-xilinx/meta-xilinx.patch'}}"
     state: absent
+  when: target == "zynq" 
 
 - name: Add meta-uscope layer to bblayers
   shell: 
@@ -64,19 +75,29 @@
     chdir: "{{toolchain_target_dir}}"
     executable: /bin/bash
 
-- name: Copy local.conf
+- name: Copy zynq local.conf
   copy:
     src: local.conf
     dest: "{{toolchain_target_dir+'/build/conf'}}"
+  when: target == "zynq"
+
+
+- name: Copy zynqmp local.conf
+  copy:
+    src: local_k26.conf
+    dest: "{{toolchain_target_dir+'/build/conf/local.conf'}}"
+  when: target == "zynqmp"
+
 
 - name: Copy platform XSA file
   copy:
     src: uscope_platform.xsa
     dest: "{{toolchain_target_dir+'/uscope_platform.xsa'}}"
-
+  when: target == "zynq"
+    
 - name: Specify paths in local conf
   replace:
     path: "{{toolchain_target_dir+'/build/conf/local.conf'}}"
     regexp: '////path///'
     replace: "{{toolchain_target_dir+'/uscope_platform.xsa'}}"
-  
+  when: target == "zynq"
