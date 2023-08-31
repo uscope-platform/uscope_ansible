@@ -24,7 +24,7 @@
     - role: build_client_container
       vars:
         - container_tag: client_testing:latest
-        - git_branch: "ui_logic_separation"
+        - git_branch: "main"
         - webserver_config: nginx_testing.conf
         - domain_name: "uscope_0.local"
 
