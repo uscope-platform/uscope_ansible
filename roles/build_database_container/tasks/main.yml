@@ -11,5 +11,5 @@
 - name: push database images to target
   command: 
   args:
-    cmd:  scp database.tar {{remote_host}}:/home/root
+    cmd:  scp -O  database.tar {{remote_host}}:/home/root
     chdir: docker

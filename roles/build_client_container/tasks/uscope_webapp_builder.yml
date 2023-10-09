@@ -23,6 +23,18 @@
   yarn:
     path: webapp
 
+
+- name: update debugging host variable
+  replace:
+    path: webapp/.env.debugging
+    regexp: 'VITE_APP_SERVER=http://uscope_0\.local/uscope/'
+    replace: "{{'VITE_APP_SERVER=http://' + server_host+'/uscope/'}}"
+- name: update production host variable
+  replace:
+    path: webapp/.env.production
+    regexp: 'VITE_APP_SERVER=https://uscope_0\.local/uscope/'
+    replace: "{{'VITE_APP_SERVER=https://' + server_host+'/uscope/'}}"
+
 - name: Build  production webapp
   shell: 
   args:

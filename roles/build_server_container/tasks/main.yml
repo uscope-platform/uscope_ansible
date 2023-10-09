@@ -12,6 +12,6 @@
 - name: push server images to target
   command: 
   args:
-    cmd:  scp server.tar {{remote_host}}:/home/root
+    cmd: scp -O  server.tar {{remote_host}}:/home/root
     chdir: docker
      

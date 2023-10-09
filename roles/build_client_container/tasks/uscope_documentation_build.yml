@@ -9,4 +9,4 @@
     chdir: doc_builder
 
 - name: Copy documentation to target
-  shell: mv doc_builder/_build docker/client/doc
+  shell: cp -r doc_builder/_build docker/client/doc
