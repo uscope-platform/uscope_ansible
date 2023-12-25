@@ -11,5 +11,5 @@
 - name: push driver images to target
   command: 
   args:
-    cmd:  scp driver.tar {{remote_host}}:/home/root
+    cmd:  scp driver.tar {{remote_host}}:/home/petalinux
     chdir: docker

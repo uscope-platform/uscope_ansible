@@ -18,6 +18,7 @@
 - name: Install docker compose
   pip:
     name: docker-compose
+  become: true
 
 #             ENABLE SERVICES
 

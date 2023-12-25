@@ -1,4 +1,4 @@
 ---
-remote_host: root@uscope_0.local
+remote_host: petalinux@uscope_0.local
 container_tag: driver:latest
 target_arch: linux/arm/v7
