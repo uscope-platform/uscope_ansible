@@ -15,70 +15,75 @@
 
 
 
-- hosts: localhost
-  vars_prompt:
-      - name: sd_device
-        prompt: Which device should be used for the SD card
-  tasks:
-    - name: write image to sd card
-      command: sudo dd of={{sd_device}} bs=1M  iflag=fullblock oflag=direct conv=fsync if=/software/yocto/build/tmp/deploy/images/k26-smk/kria-image-full-cmdline-k26-smk.wic
-
-
-
-# ########################################################
-# #             GROW ROOT PARTITION TO FILL DRIVE        #
-# ########################################################
-
-
-# - hosts: uzed
-#   remote_user: root
+# - hosts: localhost
 #   vars_prompt:
-#       - name: resize_fs
-#         prompt: Is file system resizing needed?
-#   roles:
-#     - role: fs_resizing
-#       when: resize_fs == 'yes'
-
+#       - name: sd_device
+#         prompt: Which device should be used for the SD card
+#   tasks:
+#     - name: write image to sd card
+#       command: sudo dd of={{sd_device}} bs=1M  iflag=fullblock oflag=direct conv=fsync if=/software/yocto/build/tmp/deploy/images/k26-smk/uscope-k26-smk.wic
+#     - name: Extend root partition
+#       parted:
+#         device: "{{sd_device}}"
+#         number: 2
+#         part_end: "100%"
+#         resize: true
+#         state: present
+#       become: true
+#     - name: Grow root filesystem
+#       command: resize2fs {{sd_device + '2'}}
+#       become: true
+#     - name: Wait for sd insertion 
+#       pause:
+#         prompt: Please mount the root partition of the processed sd card to /media/fils/root then continue by hitting return
+#     - name: Copy base avahi configuration to SD
+#       copy:
+#         src: base_avahi-daemon.conf
+#         dest: /media/fils/root/etc/avahi/avahi-daemon.conf
+#       become: true
+#     - name: Wait for sd removal
+#       pause:
+#         prompt: Please eject the processed sd card and then press return
 
 # ########################################################
 # #       BUILD CONTAINERS ON HOST FOR DEPLOYMENT        #
 # ########################################################
 
 
-# - hosts: localhost
-#   roles:
-#     - domain_name_assignment
+- hosts: localhost
+  roles:
+    - domain_name_assignment
 
-# - hosts: localhost
-#   roles:
-#     - pre_build
-#     - build_client_container
-#     - build_driver_container
-#     - build_database_container
-#     - build_server_container
-#     - post_build
-#   vars:
-#     - domain_name: "{{constructed_domain_name}}"
-#     - remote_host: "{{'root@' + constructed_domain_name}}"
+- hosts: localhost
+  roles:
+    - pre_build
+    - build_client_container
+    - build_driver_container
+    - build_database_container
+    - build_server_container
+    - post_build
+  vars:
+    - domain_name: "{{constructed_domain_name}}"
+    - remote_host: "{{'root@' + constructed_domain_name}}"
 
 # ########################################################
 # #             PREPARE HOST ENVIRONMENT                 #
 # ########################################################
 
-# - hosts: uzed
-#   remote_user: root
-#   roles:
-#     - containers_deploy
+- hosts: uzed
+  remote_user: root
+  roles:
+    - containers_deploy
 
 # ########################################################
 # #   UPDATE DOMAIN NAME ON TARGET                       #
 # ########################################################
 
 
-# - hosts: uzed
-#   remote_user: root
-#   roles:
-#     - avahi_conf_update
+- hosts: uzed
+  remote_user: root
+  roles:
+    - avahi_conf_update
 
 
 # ########################################################
@@ -87,11 +92,11 @@
 
 
 
-# - hosts: localhost
-#   tasks:
-#     - name: Update domain name config
-#       replace:
-#         path: domain_name.cfg
-#         regexp: '(\s+)DOMAIN_NAME_PROGRESSIVE={{old_domain_progressive}}(\s+.*)?$'
-#         replace: '\1DOMAIN_NAME_PROGRESSIVE={{new_domain_progressive}}\2'
+- hosts: localhost
+  tasks:
+    - name: Update domain name config
+      replace:
+        path: domain_name.cfg
+        regexp: '(\s+)DOMAIN_NAME_PROGRESSIVE={{old_domain_progressive}}(\s+.*)?$'
+        replace: '\1DOMAIN_NAME_PROGRESSIVE={{new_domain_progressive}}\2'
 

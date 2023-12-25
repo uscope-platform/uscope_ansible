@@ -15,14 +15,18 @@
 
 - name: Extend root partition
   parted:
-    device: /dev/mmcblk0
+    device: /dev/mmcblk1
     number: 2
     part_end: "100%"
     resize: true
     state: present
+  become: true
+  become_method: su
 
 - name: Grow root filesystem
-  command: resize2fs /dev/mmcblk0p2
+  command: resize2fs /dev/mmcblk1p2 
+  become: true
 
 - name: Reboot (Refresh kernel partition table)
   reboot:
+  become: true
