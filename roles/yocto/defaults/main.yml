@@ -14,6 +14,6 @@
 # limitations under the License.
 ---
 toolchain_target_dir: /software/yocto
-xilinx_tools_release: rel-v2023.1
-target: zynq
 github_url: https://github.com/uscope-platform
+target: zynq
+xilinx_tools_release: rel-v2023.1

@@ -4,3 +4,5 @@ webapp/
 docker/
 
 uscope_root.crt
+
+doc_builder/
