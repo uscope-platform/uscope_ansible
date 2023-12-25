@@ -42,5 +42,5 @@
 - name: Build client container
   shell: 
   args:
-    cmd: docker buildx build --ssh default --build-arg NGINX_CONFIG={{nginx_config}} --platform linux/arm/v7 -t {{image_tag}}  -o type=docker,dest=- client > client.tar
+    cmd: docker buildx build --ssh default --build-arg NGINX_CONFIG={{nginx_config}} --platform {{target_arch}} -t {{image_tag}}  -o type=docker,dest=- client > client.tar
     chdir: docker

@@ -1,3 +1,4 @@
 ---
 remote_host: root@uscope_0.local
 container_tag: database:latest
+target_arch: linux/arm/v7

@@ -19,5 +19,5 @@
 - name: push client images to target
   command: 
   args:
-    cmd:  scp client.tar {{remote_host}}:/home/root
+    cmd:  scp client.tar {{remote_host}}:/home/petalinux
     chdir: docker
