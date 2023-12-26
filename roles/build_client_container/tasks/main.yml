@@ -10,6 +10,7 @@
     repo_branch: '{{git_branch}}'
     image_tag: '{{container_tag}}'
     nginx_config: '{{webserver_config}}'
+    server_host: '{{domain_name}}'
 
 - name: Delete server key to avoid leaks
   file:
