@@ -29,15 +29,18 @@
   copy:
     src: avahi-daemon.conf
     dest: /etc/avahi/avahi-daemon.conf
+  become: true
 
 - name: Update host name config
   replace:
     path: /etc/avahi/avahi-daemon.conf
     regexp: '(\s+)host-name=HOST_NAME(\s+.*)?$'
     replace: '\1host-name={{domain_prefix + new_domain_progressive}}\2'
+  become: true
 
 - name: Update domain name config
   replace:
     path: /etc/avahi/avahi-daemon.conf
     regexp: '(\s+)domain-name=DOMAIN_NAME(\s+.*)?$'
     replace: '\1domain-name={{domain_tld}}\2'
+  become: true

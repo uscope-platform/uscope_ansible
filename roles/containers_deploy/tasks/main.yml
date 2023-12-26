@@ -15,9 +15,27 @@
 
 #             PREPARE HOST ENVIRONMENT
 
+
+- name: add petalinux user to docker group
+  user:
+    name: petalinux
+    groups: docker
+  become: true
+
+- name: Reset connection so docker group is picked up.
+  meta: reset_connection
+
+- name: Creates directory
+  file:
+    path: /usr/local/lib/docker/cli-plugins
+    state: directory
+  become: true
+
 - name: Install docker compose
-  pip:
-    name: docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-aarch64
+    dest: /usr/local/lib/docker/cli-plugins/docker-compose
+    mode: '0755'
   become: true
 
 #             ENABLE SERVICES
@@ -27,12 +45,14 @@
     name: docker
     enabled: yes
     state: started
+  become: true
 
 - name: Enable containerd
   systemd:
     name: containerd
     enabled: yes
     state: started
+  become: true
 
 #              LOAD CONTAINERS
 
@@ -40,22 +60,22 @@
   command: 
   args: 
     cmd: docker load --input driver.tar
-    chdir: /home/root
+    chdir: /home/petalinux
 
 - name: Load Server image
   command: 
   args: 
     cmd: docker load --input server.tar
-    chdir: /home/root
+    chdir: /home/petalinux
 
 - name: Load Database image
   command: 
   args: 
     cmd: docker load --input database.tar
-    chdir: /home/root
+    chdir: /home/petalinux
 
 - name: Load Client image
   command: 
   args: 
     cmd:  docker load --input client.tar
-    chdir: /home/root
+    chdir: /home/petalinux

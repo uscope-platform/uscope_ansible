@@ -102,7 +102,7 @@ The last step in the commissioning process involves the creation of an OS image,
 here as well to automate the process and can be run with the following command
 
 ```sh
-ansible-playbook commissioning.yml
+ansible-playbook commissioning.yml --ask-vault-pass --extra-vars '@passwd.yml'
 ```
 
 Several variables can be overridden to control the process:
