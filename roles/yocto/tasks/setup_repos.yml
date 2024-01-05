@@ -1,0 +1,153 @@
+# Copyright 2021 University of Nottingham Ningbo China
+# Author: Filippo Savi <filssavi@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: yocto-scripts
+  git:
+    repo: "https://github.com/Xilinx/yocto-scripts"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/yocto-scripts'}}"
+
+- name: copy script
+  copy:
+    src: "{{target_dir + '/sources/yocto-scripts/setupsdk'}}"
+    dest: "{{target_dir + '/setupsdk'}}"
+    
+- name: manifest
+  git:
+    repo: "https://github.com/Xilinx/yocto-manifests"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/manifest'}}"
+
+
+- name: meta-xilinx-tools
+  git:
+    repo: "https://github.com/Xilinx/meta-xilinx-tools"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-xilinx-tools'}}"
+
+- name: meta-petalinux
+  git:
+    repo: "https://github.com/Xilinx/meta-petalinux"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-petalinux'}}"
+
+- name: meta-xilinx-tsn
+  git:
+    repo: "https://github.com/Xilinx/meta-xilinx-tsn"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-xilinx-tsn'}}"
+
+- name: meta-kria
+  git:
+    repo: "https://github.com/Xilinx/meta-kria"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-kria'}}"
+
+- name: poky
+  git:
+    repo: "https://github.com/Xilinx/poky"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/poky'}}"
+
+- name: meta-mingw
+  git:
+    repo: "https://github.com/Xilinx/meta-mingw"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-mingw'}}"
+
+- name: meta-virtualization
+  git:
+    repo: "https://github.com/Xilinx/meta-virtualization"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-virtualization'}}"
+
+- name: meta-security
+  git:
+    repo: "https://github.com/Xilinx/meta-security"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-security'}}"
+
+- name: meta-openembedded
+  git:
+    repo: "https://github.com/Xilinx/meta-openembedded"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-openembedded'}}"
+
+- name: meta-openamp
+  git:
+    repo: "https://github.com/Xilinx/meta-openamp"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-openamp'}}"
+
+- name: meta-qt5
+  git:
+    repo: "https://github.com/Xilinx/meta-qt5"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-qt5'}}"
+
+- name: meta-aws
+  git:
+    repo: "https://github.com/Xilinx/meta-aws"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-aws'}}"
+
+- name: meta-ros
+  git:
+    repo: "https://github.com/Xilinx/meta-ros"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-ros'}}"
+
+- name: meta-jupyter
+  git:
+    repo: "https://github.com/Xilinx/meta-jupyter"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-jupyter'}}"
+
+- name: meta-system-controller
+  git:
+    repo: "https://github.com/Xilinx/meta-system-controller"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-system-controller'}}"
+
+- name: meta-vitis
+  git:
+    repo: "https://github.com/Xilinx/meta-vitis"
+    version: "{{release}}"
+    dest: "{{target_dir + '/sources/meta-vitis'}}"
+
+- name: meta-xilinx
+  git:
+    repo: "https://github.com/Xilinx/meta-xilinx"
+    version: "{{release}}"
+    recursive: false
+    dest: "{{target_dir + '/sources/meta-xilinx'}}"
+
+
+- name: update meta-xilinx submodule remote url (BUG FIX)
+  shell: 
+    cmd: git submodule set-url gen-machine-conf  https://github.com/Xilinx/gen-machine-conf.git
+    chdir: "{{target_dir + '/sources/meta-xilinx'}}"
+
+- name: init submodules
+  shell: 
+    cmd: git submodule init
+    chdir: "{{target_dir + '/sources/meta-xilinx'}}"
+
+- name: update submodules
+  shell: 
+    cmd: git submodule update
+    chdir: "{{target_dir + '/sources/meta-xilinx'}}"
+
+

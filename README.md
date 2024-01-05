@@ -99,12 +99,17 @@ These two commands should be issued in succession in the same terminal window, f
 ### uScope stack build and deployment
 
 The last step in the commissioning process involves the creation of an OS image, that is then written to an sd card and the online commissioning of the uscope platform. An ansible playbook is used 
-here as well to automate the process and can be run with the following command
+here as well to automate the process and can be run with the following command (zynq 700)
 
 ```sh
 ansible-playbook commissioning.yml --ask-vault-pass --extra-vars '@passwd.yml'
 ```
 
+or the following one for zynq ultrascale+
+
+```sh
+ansible-playbook commissioning_kria.yml --ask-vault-pass --extra-vars '@passwd.yml'
+```
 Several variables can be overridden to control the process:
 
 - ***yocto_image_dir***: This variable informs the tool of the previous step outputs location, its value should be the same as ***toolchain_target_dir***

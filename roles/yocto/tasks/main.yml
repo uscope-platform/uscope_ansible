@@ -18,23 +18,10 @@
     path: "{{toolchain_target_dir}}"
     state: directory
 
-- name: Setup directory structure with yocto and xilinx layers
-  command: 
-  args:
-    cmd: "repo init -u https://github.com/Xilinx/yocto-manifests.git -b '{{xilinx_tools_release}}'"
-    chdir: "{{toolchain_target_dir}}"
-
-- name: Download Base repositories
-  command: 
-  args:
-    cmd: "repo sync"
-    chdir: "{{toolchain_target_dir}}"
-
-- name: Checkout Base repositories
-  command: 
-  args:
-    cmd: "repo start {{xilinx_tools_release}} --all"
-    chdir: "{{toolchain_target_dir}}"
+- import_tasks: setup_repos.yml
+  vars:
+    target_dir: "{{toolchain_target_dir}}"
+    release: '{{xilinx_tools_release}}'
 
 - name: Clone meta-uscope layer
   git:

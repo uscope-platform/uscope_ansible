@@ -19,3 +19,4 @@
   vars:
     - toolchain_target_dir: /software/yocto
     - target: zynqmp
+    - xilinx_tools_release: rel-v2023.1

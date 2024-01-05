@@ -19,7 +19,7 @@
 - name: add petalinux user to docker group
   user:
     name: petalinux
-    groups: docker
+    groups: docker,xvc,uscope
   become: true
 
 - name: Reset connection so docker group is picked up.
