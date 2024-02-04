@@ -1,0 +1,95 @@
+- hosts: localhost
+  tasks:
+    - name: create container
+      docker_container:
+        name: arm_driver_compiler
+        image: ubuntu:mantic
+        command: bash
+        detach: true
+        interactive: true
+        tty: true
+
+    - name: add docker container to inventory
+      add_host:
+        name: arm_driver_compiler
+        ansible_connection: docker
+
+- hosts: arm_driver_compiler
+  gather_facts: false
+  roles:
+    - arch_specific/build_driver_arm
+
+- hosts: localhost
+  roles:
+    - pre_build
+
+- hosts: uzed
+  remote_user: root
+  tasks:
+    - name: remove old image archive
+      file:
+        name: driver.tar
+        state: absent
+  
+    - name: Remove driver container
+      docker_container:
+        name: petalinux-driver-1
+        state: absent
+
+    - name: Remove driver image
+      docker_image:
+        state: absent
+        name: driver
+        tag: latest
+
+- hosts: localhost
+  tasks:
+    - name: copy executable to container build dir
+      copy:
+        src: uscope_driver
+        dest: docker/driver
+        mode: '0755'
+
+    - name: copy emulator schema to container build dir
+      copy:
+        src:  emulator_spec_schema.json 
+        dest: docker/driver
+
+    - name: copy compiler schema to container build dir
+      copy:
+        src:  compiler_spec_schema.json 
+        dest: docker/driver
+
+    - name: Build driver container
+      shell: 
+      args:
+        cmd: docker buildx build --ssh default --platform linux/arm/v7 -t driver:latest -o type=docker,dest=- driver > driver.tar
+        chdir: docker
+        
+    - name: push driver images to target
+      command: 
+      args:
+        cmd:  scp driver.tar petalinux@uscope_0.local:/home/petalinux
+        chdir: docker
+
+- hosts: uzed
+  remote_user: root
+  tasks:
+    - name: Load driver image
+      docker_image:
+        name: driver
+        tag: latest
+        load_path: driver.tar
+        source: load
+
+
+- hosts: localhost
+  tasks:
+    - name: clean up the mess
+      file:
+        path: '{{ item }}'
+        state: absent
+      with_items:
+        - compiler_spec_schema.json
+        - emulator_spec_schema.json
+        - uscope_driver

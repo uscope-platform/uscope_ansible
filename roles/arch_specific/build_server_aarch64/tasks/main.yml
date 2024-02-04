@@ -1,0 +1,73 @@
+
+- name: update apt cache
+  raw: apt -y update
+
+- name: install prerequisite
+  raw: apt -y install build-essential cmake git python3-pip gcc-aarch64-linux-gnu g++-aarch64-linux-gnu 
+
+- name: install conan
+  raw: pip3 install conan  --break-system-packages
+
+- name: detect profile
+  raw: conan profile detect --force 
+  
+- name: copy ultrascale profile
+  copy:
+    src: ultrascale
+    dest: /root/.conan2/profiles/ultrascale
+
+- name: clone toolchain
+  git:
+    repo: 'https://github.com/uscope-platform/fCore_toolchain.git'
+    dest: /toolchain
+
+- name: get dependencies
+  command: conan install . --build=missing --profile:host=ultrascale --profile:build=default --output-folder=build
+  args:
+    chdir: /toolchain
+
+- name: run cmake
+  shell: 
+    cmd: cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DEXCLUDE_KERNEL_EMU=ON
+    chdir: /toolchain/build
+  environment:
+    LD: aarch64-linux-gnu-ld
+    CXX: aarch64-linux-gnu-g++
+    CC: aarch64-linux-gnu-gcc
+
+- name: compile uscope_driver
+  shell: 
+    cmd: cmake --build . --parallel 12
+    chdir: /toolchain/build
+  environment:
+    LD: aarch64-linux-gnu-ld
+    CXX: aarch64-linux-gnu-g++
+    CC: aarch64-linux-gnu-gcc
+
+- name: install uscope_driver
+  shell: 
+    cmd: cmake --install . --prefix /install
+    chdir: /toolchain/build
+
+- name: fetch the results binary
+  fetch: 
+    src: /install/bin/{{item}}
+    dest: ./{{item}}
+    flat: true
+  with_items:
+    - fCore_cc
+    - fCore_dis
+    - fCore_emu
+    - fCore_has
+      
+- name: fetch emulator the schemas 
+  fetch: 
+    src: /install/etc/fcore_toolchain/emulator_spec_schema.json 
+    dest: ./emulator_spec_schema.json 
+    flat: true
+
+- name: fetch compiler the schemas 
+  fetch: 
+    src: /install/etc/fcore_toolchain/compiler_spec_schema.json 
+    dest: ./compiler_spec_schema.json 
+    flat: true

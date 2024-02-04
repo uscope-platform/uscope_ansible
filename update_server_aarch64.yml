@@ -1,0 +1,101 @@
+- hosts: localhost
+  tasks:
+    - name: create container
+      docker_container:
+        name: aarch64_server_compiler
+        image: ubuntu:mantic
+        command: bash
+        detach: true
+        interactive: true
+        tty: true
+
+    - name: add docker container to inventory
+      add_host:
+        name: aarch64_server_compiler
+        ansible_connection: docker
+
+- hosts: aarch64_server_compiler
+  gather_facts: false
+  roles:
+    - arch_specific/build_server_aarch64
+
+- hosts: localhost
+  roles:
+    - pre_build
+
+- hosts: uzed
+  remote_user: petalinux
+  tasks:
+    - name: remove old image archive
+      file:
+        name: server.tar
+        state: absent
+  
+    - name: Remove server container
+      docker_container:
+        name: petalinux-server-1
+        state: absent
+
+    - name: Remove server image
+      docker_image:
+        state: absent
+        name: server
+        tag: latest
+
+- hosts: localhost
+  tasks:
+    - name: copy executable to container build dir
+      copy:
+        src: "{{item}}"
+        dest: docker/server
+        mode: '0755'
+      with_items:
+        - fCore_cc
+        - fCore_dis
+        - fCore_emu
+        - fCore_has
+        - emulator_spec_schema.json 
+        - compiler_spec_schema.json 
+
+    - name: Clone server
+      git:
+        repo: https://github.com/uscope-platform/uscope_server.git
+        dest: docker/server/uscope_server
+
+    - name: Build server container
+      shell: 
+      args:
+        cmd: docker buildx build --ssh default --platform linux/arm64 -t server:latest -o type=docker,dest=- server > server.tar
+        chdir: docker
+        
+    - name: push server images to target
+      command: 
+      args:
+        cmd:  scp server.tar petalinux@uscope_0.local:/home/petalinux
+        chdir: docker
+
+- hosts: localhost
+  tasks:
+    - name: clean up the mess
+      file:
+        path: '{{ item }}'
+        state: absent
+      with_items:
+        - fCore_cc
+        - fCore_dis
+        - fCore_emu
+        - fCore_has
+        - emulator_spec_schema.json 
+        - compiler_spec_schema.json 
+
+- hosts: uzed
+  remote_user: petalinux
+  tasks:
+    - name: Load server image
+      docker_image:
+        name: server
+        tag: latest
+        load_path: server.tar
+        source: load
+      vars:
+        ansible_command_timeout: 240

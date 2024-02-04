@@ -2,21 +2,22 @@
   tasks:
     - name: create container
       docker_container:
-        name: cross_compiler
+        name: aarch64_driver_compiler
         image: ubuntu:mantic
         command: bash
         detach: true
         interactive: true
         tty: true
+
     - name: add docker container to inventory
       add_host:
-        name: cross_compiler
+        name: aarch64_driver_compiler
         ansible_connection: docker
 
-- hosts: cross_compiler
+- hosts: aarch64_driver_compiler
   gather_facts: false
   roles:
-    - build_driver_cross
+    - arch_specific/build_driver_aarch64
 
 - hosts: localhost
   roles:
@@ -25,7 +26,6 @@
 - hosts: uzed
   remote_user: petalinux
   tasks:
-
     - name: remove old image archive
       file:
         name: driver.tar
@@ -65,6 +65,7 @@
       args:
         cmd: docker buildx build --ssh default --platform linux/arm64 -t driver:latest -o type=docker,dest=- driver > driver.tar
         chdir: docker
+        
     - name: push driver images to target
       command: 
       args:

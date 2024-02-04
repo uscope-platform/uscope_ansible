@@ -1,44 +1,28 @@
 
 - name: update apt cache
-  delegate_to: cross_compiler
   raw: apt -y update
 
 - name: install prerequisite
-  delegate_to: cross_compiler
-  raw: apt -y install build-essential cmake git python3-pip gcc-aarch64-linux-gnu g++-aarch64-linux-gnu 
+  raw: apt -y install build-essential cmake git python3-pip gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf 
 
 - name: install conan
-  delegate_to: cross_compiler
   raw: pip3 install conan  --break-system-packages
 
 - name: detect profile
-  delegate_to: cross_compiler
   raw: conan profile detect --force 
   
-- name: copy ultrascale profile
-  delegate_to: cross_compiler
+- name: copy host profile
   copy:
-    src: ultrascale
-    dest: /root/.conan2/profiles/ultrascale
+    src: zynq
+    dest: /root/.conan2/profiles/zynq
 
 - name: clone driver
-  delegate_to: cross_compiler
-  copy:
-    src: ultrascale
-    dest: /root/.conan2/profiles/ultrascale
-
-- name: Git checkout
   git:
     repo: 'https://github.com/uscope-platform/uscope_driver.git'
     dest: /driver
 
 - name: get dependencies
-  command: conan install . --build=missing --profile:host=ultrascale --profile:build=default --output-folder=build
-  args:
-    chdir: /driver
-
-- name: get dependencies
-  command: conan install . --build=missing --profile:host=ultrascale --profile:build=default --output-folder=build
+  command: conan install . --build=missing --profile:host=zynq --profile:build=default --output-folder=build
   args:
     chdir: /driver
 
@@ -47,18 +31,18 @@
     cmd: cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DEXCLUDE_KERNEL_EMU=ON
     chdir: /driver/build
   environment:
-    LD: aarch64-linux-gnu-ld
-    CXX: aarch64-linux-gnu-g++
-    CC: aarch64-linux-gnu-gcc
+    LD: arm-linux-gnueabihf-ld
+    CXX: arm-linux-gnueabihf-g++
+    CC: arm-linux-gnueabihf-gcc
 
 - name: compile uscope_driver
   shell: 
     cmd: cmake --build . --parallel 12
     chdir: /driver/build
   environment:
-    LD: aarch64-linux-gnu-ld
-    CXX: aarch64-linux-gnu-g++
-    CC: aarch64-linux-gnu-gcc
+    LD: arm-linux-gnueabihf-ld
+    CXX: arm-linux-gnueabihf-g++
+    CC: arm-linux-gnueabihf-gcc
 
 - name: install uscope_driver
   shell: 
