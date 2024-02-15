@@ -1,0 +1,40 @@
+- hosts: uzed
+  remote_user: petalinux
+  tasks:
+
+    - name: remove old image archive
+      file:
+        name: client.tar
+        state: absent
+  
+    - name: Remove client container
+      docker_container:
+        name: petalinux-client-1
+        state: absent
+
+    - name: Remove client image
+      docker_image:
+        state: absent
+        name: client
+        tag: latest
+
+- hosts: localhost
+  roles:
+    - pre_build
+    - role: build_client_container
+      vars:
+        - container_tag: client:latest
+        - git_branch: "main"
+        - target_arch: linux/arm64
+        - webserver_config: nginx_prod.conf
+        - domain_name: "uscope_0.local"
+
+- hosts: uzed
+  remote_user: petalinux
+  tasks:
+    - name: Load Client image
+      docker_image:
+        name: client
+        tag: latest
+        load_path: client.tar
+        source: load

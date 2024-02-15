@@ -25,11 +25,6 @@
   args:
     chdir: /driver
 
-- name: get dependencies
-  command: conan install . --build=missing --profile:host=ultrascale --profile:build=default --output-folder=build
-  args:
-    chdir: /driver
-
 - name: run cmake
   shell: 
     cmd: cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DEXCLUDE_KERNEL_EMU=ON
