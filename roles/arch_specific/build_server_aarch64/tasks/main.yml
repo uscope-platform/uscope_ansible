@@ -35,7 +35,7 @@
     CXX: aarch64-linux-gnu-g++
     CC: aarch64-linux-gnu-gcc
 
-- name: compile uscope_driver
+- name: compile fcore_toolchain
   shell: 
     cmd: cmake --build . --parallel 12
     chdir: /toolchain/build
@@ -44,7 +44,7 @@
     CXX: aarch64-linux-gnu-g++
     CC: aarch64-linux-gnu-gcc
 
-- name: install uscope_driver
+- name: install fcore_toolchain
   shell: 
     cmd: cmake --install . --prefix /install
     chdir: /toolchain/build

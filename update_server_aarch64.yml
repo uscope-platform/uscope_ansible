@@ -61,11 +61,12 @@
       git:
         repo: https://github.com/uscope-platform/uscope_server.git
         dest: docker/server/uscope_server
+      register: clone_result
 
     - name: Build server container
       shell: 
       args:
-        cmd: docker buildx build --ssh default --platform linux/arm64 -t server:latest -o type=docker,dest=- server > server.tar
+        cmd: docker buildx build --ssh default --platform linux/arm64 --build-arg SERVER_VER={{clone_result.before}} --build-arg N_CORES=12  -t server:latest -o type=docker,dest=- server > server.tar
         chdir: docker
         
     - name: push server images to target
