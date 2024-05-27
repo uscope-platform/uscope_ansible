@@ -33,13 +33,13 @@
   
     - name: Remove driver container
       docker_container:
-        name: petalinux-driver-1
+        name: root_driver_testing_1
         state: absent
 
     - name: Remove driver image
       docker_image:
         state: absent
-        name: driver
+        name: driver_testing
         tag: latest
 
 - hosts: localhost
@@ -63,13 +63,13 @@
     - name: Build driver container
       shell: 
       args:
-        cmd: docker buildx build --ssh default --platform linux/arm/v7 -t driver:latest -o type=docker,dest=- driver > driver.tar
+        cmd: docker buildx build --ssh default --platform linux/arm/v7 -t driver_testing:latest -o type=docker,dest=- driver > driver.tar
         chdir: docker
         
     - name: push driver images to target
       command: 
       args:
-        cmd:  scp driver.tar petalinux@uscope_0.local:/home/petalinux
+        cmd:  scp -O driver.tar root@uscope_0.local:/home/root
         chdir: docker
 
 - hosts: uzed
@@ -77,7 +77,7 @@
   tasks:
     - name: Load driver image
       docker_image:
-        name: driver
+        name: driver_testing
         tag: latest
         load_path: driver.tar
         source: load
