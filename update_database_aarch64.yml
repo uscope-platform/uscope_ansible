@@ -1,0 +1,36 @@
+- hosts: uzed
+  remote_user: petalinux
+  tasks:
+
+    - name: remove old image archive
+      file:
+        name: database.tar
+        state: absent
+  
+    - name: Remove database container
+      docker_container:
+        name: petalinux-database-1
+        state: absent
+
+    - name: Remove database image
+      docker_image:
+        state: absent
+        name: database
+        tag: latest
+
+- hosts: localhost
+  roles:
+    - pre_build
+    - role: build_database_container
+      vars:
+        - container_tag: database:latest
+
+- hosts: uzed
+  remote_user: petalinux
+  tasks:
+    - name: Load database image
+      docker_image:
+        name: database
+        tag: latest
+        load_path: database.tar
+        source: load
