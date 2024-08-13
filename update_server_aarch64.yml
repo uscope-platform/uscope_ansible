@@ -1,25 +1,4 @@
 - hosts: localhost
-  tasks:
-    - name: create container
-      docker_container:
-        name: aarch64_server_compiler
-        image: ubuntu:mantic
-        command: bash
-        detach: true
-        interactive: true
-        tty: true
-
-    - name: add docker container to inventory
-      add_host:
-        name: aarch64_server_compiler
-        ansible_connection: docker
-
-- hosts: aarch64_server_compiler
-  gather_facts: false
-  roles:
-    - arch_specific/build_server_aarch64
-
-- hosts: localhost
   roles:
     - pre_build
 
@@ -44,18 +23,6 @@
 
 - hosts: localhost
   tasks:
-    - name: copy executable to container build dir
-      copy:
-        src: "{{item}}"
-        dest: docker/server
-        mode: '0755'
-      with_items:
-        - fCore_cc
-        - fCore_dis
-        - fCore_emu
-        - fCore_has
-        - emulator_spec_schema.json 
-        - compiler_spec_schema.json 
 
     - name: Clone server
       git:
