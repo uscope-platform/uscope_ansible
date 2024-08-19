@@ -54,15 +54,3 @@
     src: /install/bin/uscope_driver
     dest: ./uscope_driver
     flat: true
-
-- name: fetch emulator the schemas 
-  fetch: 
-    src: /install/etc/fcore_toolchain/emulator_spec_schema.json 
-    dest: ./emulator_spec_schema.json 
-    flat: true
-
-- name: fetch compiler the schemas 
-  fetch: 
-    src: /install/etc/fcore_toolchain/compiler_spec_schema.json 
-    dest: ./compiler_spec_schema.json 
-    flat: true

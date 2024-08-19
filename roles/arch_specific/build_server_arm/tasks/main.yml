@@ -59,15 +59,4 @@
     - fCore_dis
     - fCore_emu
     - fCore_has
-      
-- name: fetch emulator the schemas 
-  fetch: 
-    src: /install/etc/fcore_toolchain/emulator_spec_schema.json 
-    dest: ./emulator_spec_schema.json 
-    flat: true
-
-- name: fetch compiler the schemas 
-  fetch: 
-    src: /install/etc/fcore_toolchain/compiler_spec_schema.json 
-    dest: ./compiler_spec_schema.json 
-    flat: true
+   

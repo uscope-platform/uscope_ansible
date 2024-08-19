@@ -50,16 +50,6 @@
         dest: docker/driver
         mode: '0755'
 
-    - name: copy emulator schema to container build dir
-      copy:
-        src:  emulator_spec_schema.json 
-        dest: docker/driver
-
-    - name: copy compiler schema to container build dir
-      copy:
-        src:  compiler_spec_schema.json 
-        dest: docker/driver
-
     - name: Build driver container
       shell: 
       args:
@@ -90,6 +80,4 @@
         path: '{{ item }}'
         state: absent
       with_items:
-        - compiler_spec_schema.json
-        - emulator_spec_schema.json
         - uscope_driver

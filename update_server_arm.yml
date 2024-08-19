@@ -54,8 +54,6 @@
         - fCore_dis
         - fCore_emu
         - fCore_has
-        - emulator_spec_schema.json 
-        - compiler_spec_schema.json 
 
     - name: Clone server
       git:
@@ -86,8 +84,6 @@
         - fCore_dis
         - fCore_emu
         - fCore_has
-        - emulator_spec_schema.json 
-        - compiler_spec_schema.json 
 
 - hosts: uzed
   remote_user: root
