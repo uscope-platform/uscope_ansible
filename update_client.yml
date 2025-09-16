@@ -27,6 +27,7 @@
         - git_branch: "main"
         - webserver_config: nginx_testing.conf
         - domain_name: "uscope_0.local"
+        - remote_host: root@uscope_0.local
 
 - hosts: uzed
   remote_user: root

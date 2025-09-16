@@ -81,3 +81,7 @@
         state: absent
       with_items:
         - uscope_driver
+        - docker
+        
+        - docker
+        
