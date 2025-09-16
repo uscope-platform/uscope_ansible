@@ -3,7 +3,7 @@
     - name: create container
       docker_container:
         name: arm_driver_compiler
-        image: ubuntu:mantic
+        image: ubuntu:noble
         command: bash
         detach: true
         interactive: true
