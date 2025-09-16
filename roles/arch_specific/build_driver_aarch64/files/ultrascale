@@ -3,9 +3,9 @@ os=Linux
 arch=armv8
 compiler=gcc
 build_type=Release
-compiler.cppstd=20
+compiler.cppstd=23
 compiler.libcxx=libstdc++11
-compiler.version=11
+compiler.version=13
 [buildenv]
 CC=aarch64-linux-gnu-gcc
 CXX=aarch64-linux-gnu-g++
