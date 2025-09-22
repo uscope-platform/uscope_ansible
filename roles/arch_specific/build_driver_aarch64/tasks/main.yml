@@ -36,8 +36,8 @@
 
 - name: compile uscope_driver
   shell: 
-    cmd: cmake --build . --parallel 12
-    chdir: /driver/build
+    cmd: cmake --build . --parallel 12 --target uscope_driver
+    chdir: /driver/build 
   environment:
     LD: aarch64-linux-gnu-ld
     CXX: aarch64-linux-gnu-g++
