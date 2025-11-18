@@ -20,7 +20,7 @@
     dest: webapp
 
 - name: Install packages based on package.json
-  yarn:
+  npm:
     path: webapp
 
 
@@ -38,7 +38,7 @@
 - name: Build  production webapp
   shell: 
   args:
-    cmd: yarn build
+    cmd: npm run build
     chdir: webapp
 
 - name: Copy webapp to target

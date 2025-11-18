@@ -19,13 +19,13 @@
     dest: webapp
 
 - name: Install packages based on package.json
-  yarn:
+  npm:
     path: webapp
 
 - name: Build staging webapp
   shell: 
   args:
-    cmd: yarn run build:staging
+    cmd: npm run build:staging
     chdir: webapp
 
 - name: Copy webapp to target
