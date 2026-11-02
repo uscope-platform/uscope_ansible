@@ -1,5 +1,5 @@
 - hosts: uzed
-  remote_user: petalinux
+  remote_user: amd-edf
   tasks:
 
     - name: remove old image archive
@@ -9,7 +9,7 @@
   
     - name: Remove client container
       docker_container:
-        name: petalinux-client-1
+        name: amd-edf-client-1
         state: absent
 
     - name: Remove client image
@@ -23,14 +23,16 @@
     - pre_build
     - role: build_client_container
       vars:
-        - container_tag: client:latest
-        - git_branch: "main"
-        - target_arch: linux/arm64
-        - webserver_config: nginx_prod.conf
-        - domain_name: "uscope_0.local"
+        container_tag: client:latest
+        git_branch: "main"
+        target_arch: linux/arm64
+        webserver_config: nginx_prod.conf
+        domain_name: "uscope_0.local"
+        remote_host: amd-edf@uscope_0.local
+        remote_dir: /home/amd-edf
 
 - hosts: uzed
-  remote_user: petalinux
+  remote_user: amd-edf
   tasks:
     - name: Load Client image
       docker_image:

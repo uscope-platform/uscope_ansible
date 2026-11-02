@@ -13,47 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#             PREPARE HOST ENVIRONMENT
-
-
-- name: add petalinux user to docker group
-  user:
-    name: petalinux
-    groups: docker,xvc,uscope
-  become: true
-
-- name: Reset connection so docker group is picked up.
-  meta: reset_connection
-
-- name: Creates directory
-  file:
-    path: /usr/local/lib/docker/cli-plugins
-    state: directory
-  become: true
-
-- name: Install docker compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-aarch64
-    dest: /usr/local/lib/docker/cli-plugins/docker-compose
-    mode: '0755'
-  become: true
-
-#             ENABLE SERVICES
-
-- name: Enable docker
-  systemd:
-    name: docker
-    enabled: yes
-    state: started
-  become: true
-
-- name: Enable containerd
-  systemd:
-    name: containerd
-    enabled: yes
-    state: started
-  become: true
-
 #              LOAD CONTAINERS
 
 - name: Load Driver image

@@ -1,18 +1,17 @@
 - hosts: localhost
   tasks:
     - name: create container
-      docker_container:
+      containers.podman.podman_container:
         name: aarch64_driver_compiler
-        image: ubuntu:noble
+        image: docker.io/library/ubuntu:noble
         command: bash
-        detach: true
         interactive: true
         tty: true
 
     - name: add docker container to inventory
       add_host:
         name: aarch64_driver_compiler
-        ansible_connection: docker
+        ansible_connection: containers.podman.podman
 
 - hosts: aarch64_driver_compiler
   gather_facts: false
@@ -24,7 +23,7 @@
     - pre_build
 
 - hosts: uzed
-  remote_user: petalinux
+  remote_user: amd-edf
   tasks:
     - name: remove old image archive
       file:
@@ -51,19 +50,28 @@
         mode: '0755'
 
     - name: Build driver container
-      shell: 
-      args:
-        cmd: docker buildx build --ssh default --platform linux/arm64 -t driver:latest -o type=docker,dest=- driver > driver.tar
+      command:
+        cmd: podman build --ssh default --platform linux/arm64 -t docker.io/library/driver:latest driver
+        chdir: docker
+
+    - name: Remove stale image archive (podman save will not overwrite)
+      file:
+        path: docker/driver.tar
+        state: absent
+
+    - name: Export driver image
+      command:
+        cmd: podman save -o driver.tar docker.io/library/driver:latest
         chdir: docker
         
     - name: push driver images to target
       command: 
       args:
-        cmd:  scp driver.tar petalinux@uscope_0.local:/home/petalinux
+        cmd:  scp driver.tar amd-edf@uscope_0.local:/home/amd-edf
         chdir: docker
 
 - hosts: uzed
-  remote_user: petalinux
+  remote_user: amd-edf
   tasks:
     - name: Load driver image
       docker_image:
@@ -82,6 +90,3 @@
       with_items:
         - uscope_driver
         - docker
-        
-        - docker
-        

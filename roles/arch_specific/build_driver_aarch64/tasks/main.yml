@@ -43,10 +43,10 @@
     CXX: aarch64-linux-gnu-g++
     CC: aarch64-linux-gnu-gcc
 
+# cmake --install would also run the install rules of the fetched fcore_toolchain,
+# whose tools are not built when only the uscope_driver target is compiled
 - name: install uscope_driver
-  shell: 
-    cmd: cmake --install . --prefix /install
-    chdir: /driver/build
+  command: install -D /driver/build/uscope_driver /install/bin/uscope_driver
 
 - name: fetch the results binary
   fetch: 
