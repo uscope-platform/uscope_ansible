@@ -23,7 +23,7 @@
     - pre_build
     - role: build_database_container
       vars:
-        - container_tag: database_testing:latest
+        container_tag: database_testing:latest
 
 - hosts: uzed
   remote_user: root
