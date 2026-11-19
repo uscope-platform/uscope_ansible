@@ -17,23 +17,11 @@
 # #       BUILD CONTAINERS ON HOST FOR DEPLOYMENT        #
 # ########################################################
 
-
-- hosts: localhost
-  roles:
-    - domain_name_assignment
-
-- hosts: localhost
-  roles:
-    - pre_build
-    - build_client_container
-    - build_driver_container
-    - build_database_container
-    - build_server_container
-    - post_build
-  vars:
-    - domain_name: "{{constructed_domain_name}}"
-    - remote_host: "{{'petalinux@' + constructed_domain_name}}"
-    - target_arch: linux/arm64
+- import_playbook: update_client_aarch64.yml
+- import_playbook: update_server_aarch64.yml
+- import_playbook: update_database_aarch64.yml
+- import_playbook: update_driver_aarch64.yml
+- import_playbook: update_compose_file.yml
 
 # ########################################################
 # #             PREPARE HOST ENVIRONMENT                 #
@@ -43,29 +31,3 @@
   remote_user: petalinux
   roles:
     - containers_deploy
-
-# ########################################################
-# #   UPDATE DOMAIN NAME ON TARGET                       #
-# ########################################################
-
-
-- hosts: uzed
-  remote_user: petalinux
-  roles:
-    - avahi_conf_update
-
-
-# ########################################################
-# #   UPDATE DOMAIN NAME CFG AFTER SUCCESSFULL DEPLOY    #
-# ########################################################
-
-
-
-- hosts: localhost
-  tasks:
-    - name: Update domain name config
-      replace:
-        path: domain_name.cfg
-        regexp: '(\s+)DOMAIN_NAME_PROGRESSIVE={{old_domain_progressive}}(\s+.*)?$'
-        replace: '\1DOMAIN_NAME_PROGRESSIVE={{new_domain_progressive}}\2'
-
